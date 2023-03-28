@@ -4,7 +4,7 @@ const bookSchema = new mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectID,
-      required: false,
+      required: true,
       ref: "User",
     },
     title: {

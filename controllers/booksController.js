@@ -11,12 +11,20 @@ const getAllBooks = asyncHandler(async (req, res) => {
 });
 
 const createNewBook = asyncHandler(async (req, res) => {
-  const { user: owner, title, text } = req.body;
+  const {
+    user: owner,
+    title,
+    isbn,
+    addedDate,
+    deletedDate,
+    storyline,
+    numberOfReadings,
+  } = req.body;
 
   //confirm data
-  /*  if (!owner || !title || !text.length) {
+  if (!owner || !title) {
     return res.status(400).json({ message: "All field are required" });
-  } */
+  }
   if (!owner) {
     return res.status(400).json({ message: "owner required" });
   }
@@ -27,12 +35,21 @@ const createNewBook = asyncHandler(async (req, res) => {
     return res.status(400).json({ message: "text required" });
   }
 
-  const existsOwner = await User.findOne({ username: owner }).lean().exec();
+  const existsOwner = await User.findOne({ email: owner }).lean().exec();
   if (!existsOwner) {
-    return res.status(400).json({ message: "This username does not exists" });
+    return res.status(400).json({ message: "This User does not exists" });
   }
 
-  const userObject = { owner, title, text };
+  const userObject = {
+    owner,
+    title,
+    isbn,
+    text,
+    addedDate,
+    deletedDate,
+    storyline,
+    numberOfReadings,
+  };
 
   // Create and store new user
   const book = await Book.create(userObject);
@@ -46,16 +63,17 @@ const createNewBook = asyncHandler(async (req, res) => {
 });
 
 const updateBook = asyncHandler(async (req, res) => {
-  const { id, user: owner, title, text, completed } = req.body;
+  const {
+    id,
+    user: owner,
+    title,
+    isbn,
+    storyline,
+    numberOfReadings,
+  } = req.body;
 
   //confirm Data
-  if (
-    !id ||
-    !owner ||
-    !title.length ||
-    !text.length ||
-    typeof completed !== "boolean"
-  ) {
+  if (!id || !owner || !title.length) {
     return res.status(400).json({ message: "All fields are required" });
   }
   const book = await Book.findById(id).exec();
@@ -64,13 +82,14 @@ const updateBook = asyncHandler(async (req, res) => {
     return res.status(400).json({ message: "Book not found" });
   }
 
-  book.username = owner;
+  book.user = owner;
   book.title = title;
-  book.text = text;
+  book.isbn = isbn;
+  book.storyline = storyline;
 
   const updatedBook = await book.save();
   res.json({
-    message: `Book ${updatedBook.id} of ${updatedBook.username} was updated`,
+    message: `Book ${updatedBook.id} of ${updatedBook.user} was updated`,
   });
 });
 
@@ -87,7 +106,7 @@ const deleteBook = asyncHandler(async (req, res) => {
   }
   const result = await Books.deleteOne();
 
-  const reply = `Book ${result.id} of ${result.username} was deleted`;
+  const reply = `Book ${result.id} of ${result.email} was deleted`;
 
   res.json(reply);
 });
