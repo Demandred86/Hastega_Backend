@@ -44,10 +44,10 @@ const createNewUser = asyncHandler(async (req, res) => {
 });
 
 const updateUser = asyncHandler(async (req, res) => {
-  const { id, firstName, lastName, email, password, active } = req.body;
-
+  const { id, firstName, lastName, email, password, book } = req.body;
+  console.log(req.body);
   //confirm Data
-  if (!id || !firstName || !lastName || !email || typeof active !== "boolean") {
+  if (!id || !firstName || !lastName || !email) {
     return res.status(400).json({ message: "All fields are required" });
   }
   const user = await User.findById(id).exec();
@@ -70,7 +70,7 @@ const updateUser = asyncHandler(async (req, res) => {
   user.firstName = firstName;
   user.lastName = lastName;
   user.email = email;
-  user.active = active;
+  user.book = book;
 
   //The password gets updated only if a new password is available from the request body. Otherwise we would need to send it every time we wanted to update the data.
   if (password) {
@@ -83,6 +83,7 @@ const updateUser = asyncHandler(async (req, res) => {
 });
 
 const deleteUser = asyncHandler(async (req, res) => {
+  console.log(req.body);
   const { id } = req.body;
   if (!id) {
     return res.status(400).json({ message: "User ID required" });

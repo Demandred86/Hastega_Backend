@@ -1,8 +1,11 @@
+//CHANGE THIS
+
 const mongoose = require("mongoose");
 const AutoIncrement = require("mongoose-sequence")(mongoose);
 const bookSchema = new mongoose.Schema(
   {
     user: {
+      //CHANGE THIS
       type: mongoose.Schema.Types.ObjectID,
       required: true,
       ref: "User",
@@ -39,6 +42,7 @@ const bookSchema = new mongoose.Schema(
   }
 );
 
+//CHANGE THIS
 // creates IDs
 bookSchema.plugin(AutoIncrement, {
   inc_field: "bookID",
@@ -46,7 +50,7 @@ bookSchema.plugin(AutoIncrement, {
   start_seq: 0,
 });
 
-module.exports = mongoose.model("Note", bookSchema);
+module.exports = mongoose.model("Book", bookSchema);
 
 /* Titolo
 ● Autore

@@ -1,5 +1,6 @@
 // data model for the current user
 
+//CHANGE THIS
 const mongoose = require("mongoose");
 const userSchema = new mongoose.Schema({
   firstName: {
@@ -22,6 +23,11 @@ const userSchema = new mongoose.Schema({
   active: {
     type: Boolean,
     default: true,
+  },
+
+  book: {
+    type: Array,
+    default: [],
   },
 });
 
